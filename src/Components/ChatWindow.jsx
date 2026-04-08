@@ -10,24 +10,81 @@ function ChatWindow() {
   const params = useParams();
   const [msg, setMsg] = useState("");
   const [secondUser , setSecondUser] = useState("");
+  const {userData} =useAuth();
+  const [msgList, setMsgList] = useState([]);
 
-  const receiverId=params.chatid;
-  const handleSendMsg = async () => {
-    console.log(msg);
-    setMsg("");
+  const receiverId = params?.chatid;
+  /**
+    * This is done to generate a unique chat id between two user based on user id.
+    */
+  const chatId =
+    userData?.id > receiverId
+      ? `${userData.id}-${receiverId}`
+      : `${receiverId}-${userData?.id}`;
+
+   const handleSendMsg = async () => {
+    if (msg) {
+      // date
+      const date = new Date();
+      const timeStamp = date.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+
+
+      // start chat with user 
+      if (msgList?.length === 0) {
+
+        await setDoc(doc(db, "user-chats", chatId), {
+          chatId: chatId,
+          messages: [
+            {
+              text: msg,
+              time: timeStamp,
+              sender: userData.id,
+              receiver: receiverId,
+            },
+          ],
+        });
+      } else {
+        // update in the message list
+        await updateDoc(doc(db, "user-chats", chatId), {
+          chatId: chatId,
+          // arrayUnion is used here to append to last message to the array list.
+          messages: arrayUnion({
+            text: msg,
+            time: timeStamp,
+            sender: userData.id,
+            receiver: receiverId,
+          }),
+        });
+      }
+      setMsg("");
+    }
   }
-  useEffect(()=>{
+   useEffect(() => {
+    // request , data fetch
     const getUser = async () => {
       const docRef = doc(db, "users", receiverId);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log(docSnap.data());
         setSecondUser(docSnap.data());
       }
     };
-    getUser();
-  },[receiverId])
+    
+    // message list
+    const msgUnsubscribe = onSnapshot(doc(db, "user-chats", chatId), (doc) => {
+      setMsgList(doc.data()?.messages || []);
+    });
+    
+    getUser();    
+    return () => {
+      msgUnsubscribe();
+    }
+
+  }, [receiverId]);
    // default screen if there is no user is selected
   if (!receiverId)
     return (
@@ -50,18 +107,32 @@ function ChatWindow() {
     <div className="h-full w-full bg-[#F2EFE9] flex flex-col">
       {/* topbar */}
       <div className="bg-[#eff2f5] py-2 px-4 flex items-center gap-2 shadow-sm">
-        <img  src="{secondUser?.profile_pic}||/vite.svg"
+        <img  src="{secondUser.peofile}||/vite.svg"
         alt="profile image"
         className ="h-9 w-9 rounded-full object-cover"
          />
-         <h3>{secondUser?.name}</h3>
+         <h3>{secondUser.name}</h3>
       </div>
 
 
       {/* message list */}
       <div className="flex-grow flex flex-col gap-12 p-6  overflow-y-scroll ">
-      </div>
+        {msgList?.map((m, index) => (
+          <div
+            key={index}
+            data-sender={m.sender === userData.id}
+            // break-words is the edge case where a single word is quite long, so we need to break that word before it breaks our ui.
+            className={`bg-white  w-fit rounded-md p-2 shadow-sm max-w-[400px] break-words data-[sender=true]:ml-auto data-[sender=true]:bg-[#D9FDD2] `}
+          >
+            <p>{m?.text}</p>
+            <p className="text-xs text-neutral-500  text-end">
+              {m?.time}
+            </p>
+          </div>
+        ))}
 
+
+      </div>
 
       
       {/* chat input */}

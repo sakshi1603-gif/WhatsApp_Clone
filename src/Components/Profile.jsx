@@ -31,31 +31,7 @@ function Profile(props) {
                 
                 <img src={userData.profile_pic} className="w-[160px] h-[160px]  object-cover rounded-full"
                         alt="profile picture"
-                    />
-                {/* <label className={` group relative cursor-pointer   rounded-full  overflow-hidden ${isUploading ? "pointer-events-none" : ""}`}>
-                    <img src={userData.profile_pic} className="w-[160px] h-[160px]  object-cover "
-                        alt="profile picture"
-                    />
-                    {isUploading ? (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/10 z-10">
-                            <Loader2Icon className="w-6 h-6 text-[#008069] animate-spin z-10" />
-                        </div>
-                    ) : (
-                        <div className="absolute inset-0 hidden group-hover:flex items-center justify-center bg-black/30 z-10">
-                            <Edit2Icon className="w-6 h-6 text-white" />
-                        </div>
-                    )}
-                    <input
-                        type="file"
-                        accept="image/png, image/gif, image/jpeg"
-                        onChange={(e) => {
-                            updatePhoto(e.target.files?.[0]);
-                        }}
-                        className='hidden'
-                    />
-                </label> */}
-                {error && <p className="text-red-600 text-sm">{error}</p>}
-
+                />
 
 
                 <div className="flex flex-col bg-white w-full py-4 px-8">

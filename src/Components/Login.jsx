@@ -1,5 +1,3 @@
-// rfce
-import React from 'react'
 import whatsappLogo from '../assets/whatsapp.svg';
 import { Fingerprint, LogIn as LoginIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithPopup } from "firebase/auth";
 import { auth, db } from '../../firebase';
 import { GoogleAuthProvider } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
 
 
 

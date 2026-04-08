@@ -1,5 +1,5 @@
 import { MessageSquareText, PlusIcon, SendIcon } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 // useParams
 import { useParams } from 'react-router-dom';
 import { db } from '../../firebase';
@@ -15,14 +15,14 @@ function ChatWindow() {
 
   const receiverId = params?.chatid;
   /**
-    * This is done to generate a unique chat id between two user based on user id.
-    */
+  * This is done to generate a unique chat id between two user based on user id.
+  */
   const chatId =
     userData?.id > receiverId
       ? `${userData.id}-${receiverId}`
       : `${receiverId}-${userData?.id}`;
 
-   const handleSendMsg = async () => {
+  const handleSendMsg = async () => {
     if (msg) {
       // date
       const date = new Date();
@@ -63,15 +63,15 @@ function ChatWindow() {
       setMsg("");
     }
   }
-   useEffect(() => {
+  useEffect(() => {
     // request , data fetch
     const getUser = async () => {
-      const docRef = doc(db, "users", receiverId);
-      const docSnap = await getDoc(docRef);
+    const docRef = doc(db, "users", receiverId);
+    const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        setSecondUser(docSnap.data());
-      }
+    if (docSnap.exists()) {
+      setSecondUser(docSnap.data());
+    }
     };
     
     // message list
@@ -85,6 +85,8 @@ function ChatWindow() {
     }
 
   }, [receiverId]);
+
+
    // default screen if there is no user is selected
   if (!receiverId)
     return (
@@ -100,19 +102,27 @@ function ChatWindow() {
         </p>
       </section>
     );
-      // start chat with user 
+
     
-  //chat screen code 
+  //chat screen  
   return <section className="w-[70%] h-full flex flex-col gap-4 items-center justify-center">
     <div className="h-full w-full bg-[#F2EFE9] flex flex-col">
       {/* topbar */}
       <div className="bg-[#eff2f5] py-2 px-4 flex items-center gap-2 shadow-sm">
-        <img  src="{secondUser.peofile}||/vite.svg"
-        alt="profile image"
-        className ="h-9 w-9 rounded-full object-cover"
-         />
-         <h3>{secondUser.name}</h3>
-      </div>
+        <img
+          src={secondUser?.profile_pic}
+          alt="profile picture"
+          className="w-9 h-9 rounded-full object-cover"
+        />
+        <div >
+          <h3>{secondUser?.name}</h3>
+          {secondUser?.lastSeen && (
+            <p className="text-xs text-neutral-400">
+              last seen at {secondUser?.lastSeen}
+            </p>
+          )}
+       </div>
+    </div>
 
 
       {/* message list */}

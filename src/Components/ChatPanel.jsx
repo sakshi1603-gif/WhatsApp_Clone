@@ -44,7 +44,7 @@ function ChatPanel() {
     return (
         <div className="bg-white w-[30vw] min-w-[350px]">
             {/* top-bar */}
-            <div className="bg-background py-2 px-4 border-r  flex justify-between items-center gap-2">
+            <div className="bg-[#eff2f5] py-2 px-4 border-r  flex justify-between items-center gap-2">
                 <button
                     onClick={() => { setShowProfile(true) }}
                 >
@@ -67,10 +67,10 @@ function ChatPanel() {
             {
                 isLoading ? <div className="h-full w-full flex justify-center items-center"><Loader2Icon className="w-10 h-10 animate-spin" /> </div> :
                     <div className="bg-white py-2 px-3">
-                        <div className="bg-background flex items-center gap-4 px-3 py-2 rounded-lg">
+                        <div className="bg-[#eff2f5] flex items-center gap-4 px-3 py-2 rounded-lg">
                             <SearchIcon className="w-4 h-4" />
                             <input
-                                className="bg-background focus-within:outline-none"
+                                className="bg-[#eff2f5] focus-within:outline-none"
                                 placeholder="Search"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}

@@ -109,9 +109,9 @@ function ChatWindow() {
 
   //chat screen code 
   return <section className="w-[70%] h-full flex flex-col gap-4 items-center justify-center">
-    <div className="h-full w-full bg-chat-bg flex flex-col">
+    <div className="h-full w-full bg-[#F2EFE9] flex flex-col">
       {/* topbar */}
-      <div className="bg-background py-2 px-4 flex items-center gap-2 shadow-sm">
+      <div className="bg-[#eff2f5] py-2 px-4 flex items-center gap-2 shadow-sm">
         <img
           src={secondUser?.profile_pic || "/default-user.png"}
           alt="profile picture"
@@ -137,7 +137,7 @@ function ChatWindow() {
             key={index}
             data-sender={m.sender === userData.id}
             // break-words is the edge case where a single word is quite long, so we need to break that word before it breaks our ui.
-            className={`bg-white  w-fit rounded-md p-2 shadow-sm max-w-[400px] break-words data-[sender=true]:ml-auto data-[sender=true]:bg-primary-light `}
+            className={`bg-white  w-fit rounded-md p-2 shadow-sm max-w-[400px] break-words data-[sender=true]:ml-auto data-[sender=true]:bg-[#D9FDD2] `}
           >
             <p>{m?.text}</p>
             <p className="text-xs text-neutral-500  text-end">
@@ -149,7 +149,7 @@ function ChatWindow() {
 
       </div>
       {/* chat input */}
-      <div className="bg-background py-3 px-6 shadow flex items-center gap-6">
+      <div className="bg-[#eff2f5] py-3 px-6 shadow flex items-center gap-6">
         <PlusIcon />
         <input type="text" className="w-full py-2 px-4 rounded focus:outline-none"
           placeholder="Type a message..."

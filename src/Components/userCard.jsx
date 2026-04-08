@@ -9,7 +9,7 @@ function UserCard(props) {
 
     return (
         <div key={userObject.id}>
-            <Link className={`flex gap-4 items-center  hover:bg-background p-2 rounded cursor-pointer ${isActive && "bg-background"
+            <Link className={`flex gap-4 items-center  hover:bg-[#eff2f5] p-2 rounded cursor-pointer ${isActive && "bg-[#eff2f5]"
                     }`} to={`/${userObject.id}`}>
                 {/* Render user data here */}
                 <img src={userObject.userData.profile_pic} alt="" className="w-12 h-12 object-cover rounded-full" />
@@ -21,4 +21,4 @@ function UserCard(props) {
     )
 }
 
-export default UserCard;
+export default UserCard

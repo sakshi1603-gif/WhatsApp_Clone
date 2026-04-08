@@ -1,5 +1,6 @@
 // rfce
 import React from 'react'
+import whatsappLogo from '../assets/whatsapp.svg';
 import { Fingerprint, LogIn as LoginIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // auth-step-3
@@ -7,10 +8,9 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, db } from '../../firebase';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
+import { useAuth } from "./AuthContext";
 
-
-
-async function createUser(authData) {
+async function createUser(authData , setUserData) {
     const userObject = authData.user;
     const { uid, photoURL, displayName, email } = userObject;
     const date = new Date();
@@ -20,52 +20,62 @@ async function createUser(authData) {
         hour12: true,
     });
 
-    await setDoc(doc(db, "users", uid), {
+    const data = await setDoc(doc(db, "users", uid), {
         email,
         profile_pic: photoURL,
         name: displayName,
         lastSeen: timeStamp,
     })
+    setUserData(data);
+    
 }
 
 
 function Login() {
+    const { setUserData} = useAuth();
     const navigate = useNavigate();
     const handleLogin = async () => {
-        const userData = await signInWithPopup(auth, new GoogleAuthProvider);
-        await createUser(userData);
+        const userData = await signInWithPopup(auth, new GoogleAuthProvider());
+        await createUser(userData , setUserData);
         navigate("/");
     }
     return (
-        <>
-            <div className='h-[220px] bg-primary'>
+      <>
+  {/* Top Header */}
+  <div className="h-[220px] bg-[#04a784] flex items-start">
+    <div className="flex items-center gap-3 px-10 pt-10">
+      <img src={whatsappLogo} alt="" className="h-6" />
+      <span className="text-white font-semibold tracking-wide text-sm">
+        WHATSAPP
+      </span>
+    </div>
+  </div>
 
-                <div className='flex ml-[200px] pt-10 items-center gap-4'>
-                    <img src="https://whatsapp-clone-826a9.web.app/whatsapp.svg" alt=""
-                        className='h-8'
-                    />
-                    <div className="text-white uppercase font-medium">Whatsapp</div>
-                </div>
-            </div>
-            <div className='h-[calc(100vh-220px)] bg-background flex justify-center items-center relative'>
-                <div className='h-[80%] w-[50%] bg-white shadow-2xl flex flex-col gap-4 justify-center items-center absolute -top-[93px]'>
-                    <Fingerprint className='h-20 w-20 text-primary'
-                        strokeWidth={1} />
-                    <div>Sign In</div>
-                    <div>Sign in with your google account to get started.</div>
-                    <button
-                        onClick={handleLogin}
-                        className='flex gap-2 items-center bg-primary p-4 text-white rounded-[5px]
-                        '>
-                        <div >
-                            Sign in with Google
-                        </div>
-                        <LoginIcon />
-                    </button>
-                </div>
-            </div>
+  {/* Background */}
+  <div className="bg-[#eff2f5] h-[calc(100vh-220px)] flex justify-center items-start">
 
-        </>
+    {/* Card */}
+    <div className="bg-white w-[50%] h-[75%] -mt-28 rounded-md shadow-xl flex flex-col justify-center items-center gap-5">
+
+      <Fingerprint className="h-16 w-16 text-[#04a784]" strokeWidth={1} />
+
+      <h2 className="text-lg font-semibold text-gray-700">
+        Sign In
+      </h2>
+
+      <p className="text-gray-500 text-sm text-center">
+        Sign in with your google account <br /> to get started.
+      </p>
+
+      <button className="mt-3 flex items-center gap-2 bg-[#008069] hover:bg-[#04a784] transition text-white text-sm px-5 py-2 rounded shadow"
+      onClick={handleLogin}>
+        <span>Sign in with Google</span>
+        <LoginIcon size={18} />
+      </button>
+
+    </div>
+  </div>
+</>
     )
 }
 

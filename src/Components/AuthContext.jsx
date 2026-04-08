@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { auth, db } from "../../firebase";
 // import { auth, db, storage } from "../../firebase";
 import { doc, getDoc, updateDoc , setDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+// import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 // 1. 
 const AuthContext = React.createContext();

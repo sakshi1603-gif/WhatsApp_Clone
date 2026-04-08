@@ -10,15 +10,12 @@ function Home() {
       <div className="absolute top-0 h-[130px] bg-[#04a784]  w-full" />
       <div className='h-screen absolute w-full p-5 '>
         <div className="bg-[#eff2f5] w-full h-full shadow-md flex">
-          {/* conditonal rehne waale hai -> chat list , profile */}
+          {/* conditonal -> chat list or profile */}
           <ChatPanel />
           {/* <div>Empty Chat</div>:<div>Individual CHat</div> */}
           <ChatWindow></ChatWindow>
         </div>
       </div>
-
-
-
 
     </main>
 

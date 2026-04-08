@@ -8,37 +8,20 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, db } from '../../firebase';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { useAuth } from "./AuthContext";
 
-async function createUser(authData , setUserData) {
-    const userObject = authData.user;
-    const { uid, photoURL, displayName, email } = userObject;
-    const date = new Date();
-    const timeStamp = date.toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-    });
-
-    const data = await setDoc(doc(db, "users", uid), {
-        email,
-        profile_pic: photoURL,
-        name: displayName,
-        lastSeen: timeStamp,
-    })
-    setUserData(data);
-    
-}
 
 
 function Login() {
-    const { setUserData} = useAuth();
     const navigate = useNavigate();
     const handleLogin = async () => {
-        const userData = await signInWithPopup(auth, new GoogleAuthProvider());
-        await createUser(userData , setUserData);
+    try {
+        await signInWithPopup(auth, new GoogleAuthProvider());
         navigate("/");
+    } catch (err) {
+        console.error(err);
+        alert("Login failed");
     }
+}
     return (
       <>
   {/* Top Header */}

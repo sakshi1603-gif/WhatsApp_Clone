@@ -28,6 +28,10 @@ function Profile(props) {
                 <div> Profile</div>
             </div>
             <div className="flex flex-col items-center justify-center gap-8 mt-8">
+                
+                <img src={userData.profile_pic} className="w-[160px] h-[160px]  object-cover rounded-full"
+                        alt="profile picture"
+                    />
                 {/* <label className={` group relative cursor-pointer   rounded-full  overflow-hidden ${isUploading ? "pointer-events-none" : ""}`}>
                     <img src={userData.profile_pic} className="w-[160px] h-[160px]  object-cover "
                         alt="profile picture"

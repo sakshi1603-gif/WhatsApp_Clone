@@ -2,7 +2,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import { auth, db } from "../../firebase";
 // import { auth, db, storage } from "../../firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc , setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 // 1. 
@@ -20,16 +20,26 @@ function AuthWrapper({ children }) {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        // check kr rahe ho if you have logged in before
-        // kuch bhi change -> yha update ho jaayega 
+        // check if you have logged in before
+        // anthing changes -> udate will happen  
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setLoading(true);
             if (currentUser) {
                 const docRef = doc(db, "users", currentUser?.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
+                let docSnap = await getDoc(docRef);
+                if (!docSnap.exists()) {
+                    await setDoc(docRef, {
+                    email: currentUser.email,
+                    profile_pic: currentUser.photoURL,
+                    name: currentUser.displayName,
+                    lastSeen: "",
+                    status: "online"
+                });
+                     docSnap = await getDoc(docRef);
+                }
+                
                     const { profile_pic, name, email, lastSeen, status } = docSnap.data();
-                    // context me jaake save kr dia hai user ka data
+                    // save the user data in context
                     await setLastSeen(currentUser);
 
                     setUserData({
@@ -38,10 +48,10 @@ function AuthWrapper({ children }) {
                         email,
                         name,
                         lastSeen,
-                        status: status ? status : ""
+                        status: status
                     });
 
-                }
+                
             }
             setLoading(false);
         })
